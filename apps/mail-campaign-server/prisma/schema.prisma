@@ -1,0 +1,50 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DB_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model CampaignReport {
+  bounceCount       Int?
+  campaign          Campaign? @relation(fields: [campaignId], references: [id])
+  campaignId        String?
+  clickCount        Int?
+  createdAt         DateTime  @default(now())
+  id                String    @id @default(cuid())
+  openCount         Int?
+  sentCount         Int?
+  spamCount         Int?
+  unsubscribedCount Int?
+  updatedAt         DateTime  @updatedAt
+}
+
+model Recipient {
+  createdAt DateTime @default(now())
+  email     String?
+  firstName String?
+  id        String   @id @default(cuid())
+  lastName  String?
+  updatedAt DateTime @updatedAt
+}
+
+model EmailTemplate {
+  content   String?
+  createdAt DateTime @default(now())
+  id        String   @id @default(cuid())
+  name      String?
+  updatedAt DateTime @updatedAt
+}
+
+model Campaign {
+  campaignReports CampaignReport[]
+  createdAt       DateTime         @default(now())
+  description     String?
+  endDate         DateTime?
+  id              String           @id @default(cuid())
+  name            String?
+  startDate       DateTime?
+  updatedAt       DateTime         @updatedAt
+}
